@@ -1,5 +1,7 @@
 from collections import deque
 
+# I think this problem can be reduced to minimum spanning tree problem
+# By setting the weight of each edge to be equal to its index
 def findRedundantConnection(edges: List[List[int]]) -> List[int]:
     n = len(edges)
     disjoint_union = [ i for i in range(n + 1) ]
