@@ -13,6 +13,9 @@ def numberOfEdgesAdded(n : int, edges: List[List[int]]) -> int:
         if dsu[i] == i:
             return (i, 0, True)
         next = dsu[i]
+        # IH, dsu[next] points to representative
+        #     dist_to_rep = distance from 'next' to rep
+        #     is_same_as_rep = is 'next's colour same as rep
         (rep, dist_to_rep, is_same_as_rep) = find_rep_dist_sameness(next)
         dsu[i] = rep
         dist_to_parent[i] += dist_to_rep
@@ -25,8 +28,8 @@ def numberOfEdgesAdded(n : int, edges: List[List[int]]) -> int:
     total = 0
     for [u, v, w] in edges:
 
-        u_rep, u_dist_to_u_rep, u_relative = find_rep_dist_sameness(u)
-        v_rep, v_dist_to_v_rep, v_relative = find_rep_dist_sameness(v)
+        u_rep, u_dist_to_u_rep, u_same_as_rep = find_rep_dist_sameness(u)
+        v_rep, v_dist_to_v_rep, v_same_as_rep = find_rep_dist_sameness(v)
 
         if u_rep != v_rep:
             lower_rep, higher_rep = min(u_rep, v_rep), max(u_rep, v_rep)
@@ -37,8 +40,8 @@ def numberOfEdgesAdded(n : int, edges: List[List[int]]) -> int:
 
             total += 1
         else: # u_rep == v_rep
-            u_colour = colour[u_rep] if u_relative else not colour[u_rep]
-            v_colour = colour[v_rep] if v_relative else not colour[v_rep]
+            u_colour = colour[u_rep] if u_same_as_rep else not colour[u_rep]
+            v_colour = colour[v_rep] if v_same_as_rep else not colour[v_rep]
             if u_colour == v_colour and w % 2 == 0 \
                or u_colour != v_colour and w % 2 == 1:
                 total += 1
